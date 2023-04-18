@@ -2,10 +2,10 @@ import pandas as pd
 import tensorflow as tf
 
 # Load preprocessed training CSV file
-train_df = pd.read_csv('ol_ler_sit_stand_comb.csv')
+train_df = pd.read_csv('sitting_combined.csv')
 
 # Load test CSV file for prediction
-test_df = pd.read_csv('ol_standing.csv')
+test_df = pd.read_csv('ol_sitting.csv')
 
 # Map label values to integer values
 label_map = {label: i for i, label in enumerate(set(train_df['activity']))}
@@ -41,7 +41,7 @@ optimizer = tf.keras.optimizers.SGD(learning_rate=1e-5)
 model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Train model
-model.fit(X_train, y_train, epochs=15, batch_size=32, validation_split=0.2)
+model.fit(X_train, y_train, epochs=20, batch_size=32, validation_split=0.2)
 
 # Predict on test data and convert label integers back to original string labels
 y_pred = model.predict(X_test)
@@ -49,4 +49,4 @@ pred_labels = [list(label_map.keys())[list(label_map.values()).index(pred)] for 
 
 # Create dataframe of predicted labels and write to CSV file
 pred_df = pd.DataFrame({'predicted_activity': pred_labels})
-pred_df.to_csv('predicted_labels_olstand.csv', index=False)
+pred_df.to_csv('predicted_labels.csv', index=False)
